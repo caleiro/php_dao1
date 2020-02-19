@@ -7,6 +7,7 @@
         private $nif;
         private $email;
         private $id_contacto;
+        private $senha;
         private $obs;
         //codigo
         public function getCodigo(){
@@ -52,6 +53,13 @@
         public function setId_contacto($value){
             $this->id_contacto = $value;
         }
+        //senha
+        public function getSenha(){
+            return $this->senha;
+        }
+        public function setSenha($value){
+            $this->senha = $value;
+        }
         //obs
         public function getObs(){
             return $this->obs;
@@ -76,7 +84,51 @@
                 $this->setNif($row['nif']);
                 $this->setEmail($row['email']);
                 $this->setId_contacto($row['id_contacto']);
+                $this->setSenha($row['senha']);
                 $this->setObs($row['obs']);
+            }
+        }
+
+        # Listagem todos segurados
+        //static - assim não é preciso instanciar o objeto
+        public static function getList() 
+        {
+            $sql = new Sql();
+            return $sql->select("select * from segurado order by nome");
+        }
+
+        # Procura segurado que tenhma um dado nome...
+        //static - assim não é preciso instanciar o objeto
+        public static function search($login) 
+        {
+            $sql = new Sql();
+            return $sql->select("select * from segurado where nome like :search",array(
+                ':search'=>"%".$login."%"
+            ));
+        }
+
+        # Login
+        public function login($id, $pass)
+        {
+            $sql = new Sql();
+            $results = $sql->select("select * from segurado where codigo = :ID and senha = :SENHA", array(
+                ":ID"=>$id,
+                ":SENHA"=>$pass
+            ));
+
+            if(count($results) > 0){
+                $row=$results[0];
+
+                $this->setCodigo($row['codigo']);
+                $this->setNome($row['nome']);
+                $this->setId_postal($row['id_postal']);
+                $this->setNif($row['nif']);
+                $this->setEmail($row['email']);
+                $this->setId_contacto($row['id_contacto']);
+                $this->setSenha($row['senha']);
+                $this->setObs($row['obs']);
+            } else {
+                throw new Exception("Login e/ou Senha inválidos.");
             }
         }
 
@@ -89,6 +141,7 @@
                 "nif"=>$this->getNif(),
                 "email"=>$this->getEmail(),
                 "id_contacto"=>$this->getId_contacto(),
+                "senha"=>$this->getSenha(),
                 "obs"=>$this->getObs()
             ));
         }
