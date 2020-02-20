@@ -23,9 +23,23 @@ echo json_encode($lista)."<br><br>";
 echo var_dump($lista);*/
 
 //Login um usuário
-$usuario = new Segurado();
+/*$usuario = new Segurado();
 $usuario->login(2,"1234678");
+echo $usuario;*/
 
-echo $usuario;
+//insert com procedure novo segurado
+//$registo= new Segurado();
+/*$registo->setNome("Diogo Oliveira");
+$registo->setSenha("asdfghjk");
+$registo= new Segurado("Sandra Pinto","123");
+$registo->insert();
+echo $registo."<br>";
+var_dump($registo);*/
 
+$segurado = new Segurado();
+
+$segurado->loadById(15);
+echo $segurado."<br><br>";
+$segurado->update("Luís Nobre", "12345");
+echo $segurado;
 ?>

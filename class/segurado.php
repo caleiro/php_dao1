@@ -76,16 +76,8 @@
             ));
 
             if(count($results) > 0){
-                $row=$results[0];
-
-                $this->setCodigo($row['codigo']);
-                $this->setNome($row['nome']);
-                $this->setId_postal($row['id_postal']);
-                $this->setNif($row['nif']);
-                $this->setEmail($row['email']);
-                $this->setId_contacto($row['id_contacto']);
-                $this->setSenha($row['senha']);
-                $this->setObs($row['obs']);
+                
+                $this->setData($results[0]);
             }
         }
 
@@ -117,19 +109,55 @@
             ));
 
             if(count($results) > 0){
-                $row=$results[0];
 
-                $this->setCodigo($row['codigo']);
-                $this->setNome($row['nome']);
-                $this->setId_postal($row['id_postal']);
-                $this->setNif($row['nif']);
-                $this->setEmail($row['email']);
-                $this->setId_contacto($row['id_contacto']);
-                $this->setSenha($row['senha']);
-                $this->setObs($row['obs']);
+                $this->setData($results[0]);
+
             } else {
                 throw new Exception("Login e/ou Senha inválidos.");
             }
+        }
+
+        public function setData($data)
+        {
+            $this->setCodigo($data['codigo']);
+            $this->setNome($data['nome']);
+            $this->setId_postal($data['id_postal']);
+            $this->setNif($data['nif']);
+            $this->setEmail($data['email']);
+            $this->setId_contacto($data['id_contacto']);
+            $this->setSenha($data['senha']);
+            $this->setObs($data['obs']);
+        }
+
+        public function insert(){
+
+            $sql = new Sql();
+            $results = $sql->select("CALL sp_segurados_insert(:NOME, :SENHA)", array(
+                ':NOME'=>$this->getNome(),
+                ':SENHA'=>$this->getSenha()
+            ));
+
+            if(count($results)>0){
+                $this->setData($results[0]);
+            }
+        }
+
+        public function __construct($nome = "", $senha ="")
+        {
+            $this->setNome($nome);
+            $this->setSenha($senha);
+        }
+
+        public function update($nome, $senha){
+            $this->setNome($nome);
+            $this->setSenha($senha);
+            
+            $sql = new Sql();
+            $results = $sql->query("update segurado set nome=:NOME, senha=:SENHA where codigo = :ID", array(
+                ':NOME'=>$this->getNome(),
+                ':SENHA'=>$this->getSenha(),
+                ':ID'=>$this->getCodigo()
+            ));
         }
 
         public function __toString(){
