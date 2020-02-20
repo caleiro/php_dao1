@@ -151,13 +151,30 @@
         public function update($nome, $senha){
             $this->setNome($nome);
             $this->setSenha($senha);
-            
+
             $sql = new Sql();
             $results = $sql->query("update segurado set nome=:NOME, senha=:SENHA where codigo = :ID", array(
                 ':NOME'=>$this->getNome(),
                 ':SENHA'=>$this->getSenha(),
                 ':ID'=>$this->getCodigo()
             ));
+        }
+
+        public function delete(){
+            $sql = new Sql();
+
+            $sql->query("delete from segurado where codigo = :ID", array(
+                ':ID'=>$this->getCodigo()
+            ));
+
+            $this->setCodigo(0);
+            $this->setNome("");
+            $this->setId_postal(0);
+            $this->setNif(0);
+            $this->setEmail("");
+            $this->setId_contacto(0);
+            $this->setSenha("");
+            $this->setObs("");
         }
 
         public function __toString(){

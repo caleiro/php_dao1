@@ -36,10 +36,16 @@ $registo->insert();
 echo $registo."<br>";
 var_dump($registo);*/
 
-$segurado = new Segurado();
-
+//Alterar um segurado
+/*$segurado = new Segurado();
 $segurado->loadById(15);
 echo $segurado."<br><br>";
 $segurado->update("Luís Nobre", "12345");
+echo $segurado;*/
+
+//eliminar segurado
+$segurado = new Segurado();
+$segurado->loadById(11);
+$segurado->delete();
 echo $segurado;
 ?>
